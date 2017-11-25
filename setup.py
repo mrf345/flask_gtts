@@ -18,7 +18,7 @@ setup(
     license='MIT',
     author='Mohamed Feddad',
     author_email='mrf345@gmail.com',
-    description='GTTS Google text to speech flask extension',
+    description='gTTS Google text to speech flask extension',
     long_description=__doc__,
     py_modules=['gtts'],
     packages=['flask_gtts'],
@@ -30,7 +30,7 @@ setup(
         'gTTS'
     ],
     keywords=['flask', 'extension', 'google', 'text', 'speech',
-              'gTTS', 'TTS'],
+              'gTTS', 'TTS', 'text-to-speech'],
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
