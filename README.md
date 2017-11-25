@@ -31,7 +31,7 @@
 `{% endblock %}` <br />
 #### _Result_
 ![Datepicker](https://raw.githubusercontent.com/usb-resetter/usb-resetter.github.io/master/images/gtts.png)
-##### _ Press any of them to hear the accent _
+##### _Press any of them to hear the accent !_
 
 ## Settings:
 #### - gtts() options
