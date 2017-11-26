@@ -11,39 +11,46 @@
 `git clone https://github.com/mrf345/flask_gtts.git`<br />
 `python setup.py install`
 ## Run it :
-`from flask import Flask, render_template` <br />
-`from flask_gtts import gtts` <br />
-`app = Flask(__name__)` <br />
-`gtts(app)` <br />
+```python
+from flask import Flask, render_template
+from flask_gtts import gtts
+app = Flask(__name__)
+gtts(app)
+```
 #### inside the template
-`{% block content %}` <br />
-`<audio src="{{ sayit(text='Hello from Flask !') }}"></audio>`<br />
-`{% endblock %}` <br />
+```jinja
+{% block content %}
+  <audio src="{{ sayit(text='Hello from Flask !')}}"></audio>
+{% endblock %}
+```
 
-#### More detailed example
-`{% block content %}` <br />
-`<button type='button' onclick='document.getElementById("us").play();'>American</button>`<br />
-`<button type='button' onclick='document.getElementById("ausi").play();'>Australian</button>` <br />
-`<button type='button' onclick='document.getElementById("brit").play();'>British</button>` <br />
-`<audio id='us' src="{{ sayit(lang='en-us', text='Hello from Flask !') }}"></audio>` <br />
-`<audio id='ausi' src="{{ sayit(lang='en-au', text='Hello from Flask !') }}"></audio>` <br />
-`<audio id='brit' src="{{ sayit(lang='en-uk', text='Hello from Flask !') }}"></audio>`<br />
-`{% endblock %}` <br />
+#### More detailed e`{% block content %}` <br />
+```python
+{% block content %}
+  <button type='button' onclick='document.getElementById("us").play();'>American</button>
+  <button type='button' onclick='document.getElementById("ausi").play();'>Australian</button>
+  <button type='button' onclick='document.getElementById("brit").play();'>British</button>
+  <audio id='us' src="{{ sayit(lang='en-us', text='Hello from Flask !') }}"></audio>
+  <audio id='ausi' src="{{ sayit(lang='en-au', text='Hello from Flask !') }}"></audio>
+  <audio id='brit' src="{{ sayit(lang='en-uk', text='Hello from Flask !') }}"></audio>
+{% endblock %}
+```
 #### _Result_
 ![Datepicker](https://raw.githubusercontent.com/usb-resetter/usb-resetter.github.io/master/images/gtts.png)
 ##### _Press any of them to hear the accent !_
 
 ## Settings:
-#### - gtts() options
-#### `gtts(app=app,`<br />
-##### _`---> temporary=True, # to remove audio files on exit`_<br />
-##### _`---> tempdir='tempfile') # relative path in-which audio files will be stored`_ <br />
-
-#### - sayit() options
-#### `sayit(`<br />
-##### _`---> lang='en-us', # language to convert text to`_
-##### _`---> text='say hi') # text to be converted`_<br />
-
+- gtts() options
+```python
+gtts(app=app,
+    temporary=True, # to remove audio files on exit
+    tempdir='tempfile') # relative path in-which audio files will be stored
+```
+- sayit() options
+```python
+    sayit(lang='en-us', # language to convert text to
+          text='say hi') # text to be converted`_<br />
+```
 ##### _List of supported languages :_
 `
     'af' : 'Afrikaans'
