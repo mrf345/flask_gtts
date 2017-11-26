@@ -24,8 +24,8 @@ gtts(app)
 {% endblock %}
 ```
 
-#### More detailed e`{% block content %}` <br />
-```python
+#### More detailed example
+```jinja
 {% block content %}
   <button type='button' onclick='document.getElementById("us").play();'>American</button>
   <button type='button' onclick='document.getElementById("ausi").play();'>Australian</button>
@@ -37,7 +37,7 @@ gtts(app)
 ```
 #### _Result_
 ![Datepicker](https://raw.githubusercontent.com/usb-resetter/usb-resetter.github.io/master/images/gtts.png)
-##### _Press any of them to hear the accent !_
+##### _Click any of them to hear the accent !_
 
 ## Settings:
 - gtts() options
