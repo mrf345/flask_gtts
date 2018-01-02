@@ -9,6 +9,7 @@
 `pip install Flask-gTTS` <br />
 #### - or from github
 `git clone https://github.com/mrf345/flask_gtts.git`<br />
+`cd flask_gtts` <br />
 `python setup.py install`
 ## Run it :
 ```python

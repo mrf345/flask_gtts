@@ -12,6 +12,14 @@ except ImportError:
 
 class gtts(object):
     def __init__(self, app=None, temporary=True, tempdir='flask_gtts'):
+        """
+        initating the extension with the Flask app instance
+        @param: app Flask app instance (Default: None)
+        @param: temporary to remove stored audio files upon exiting (Default:
+        True)
+        @param: tempdir relative path to the directory in-which audio files
+        will be stored (Default: 'flask_gtts')
+        """
         self.app = app
         self.temporary = temporary
         self.rpath = path.join(self.app.static_folder, tempdir)
@@ -28,9 +36,9 @@ class gtts(object):
                 "gtts(tempdir=) requires relative path not abolute"))
         if not isinstance(temporary, bool):
             raise(TypeError("gtts(temporary=) takes True or False"))
-        self.injectem()
+        self.injectem()  # injecting into the template
         if self.temporary:
-            register(self.cleanup)
+            register(self.cleanup)  # register audio files removal before exit
 
     def init_app(self, app):
         if hasattr(app, 'teardown_appcontext'):
@@ -42,19 +50,20 @@ class gtts(object):
         pass
 
     def injectem(self):
+        """ to inject say function as sayit into the template """
         @self.app.context_processor
         def inject_vars():
             return dict(sayit=self.say)
 
     def say(self, lang='en-us', text='Flask says Hi!'):
         for h, a in {'lang': lang, 'text': text}.items():
-            if not isinstance(a, str):
+            if not isinstance(a, str):  # check if recieving a string
                 raise(TypeError("gtts.say(%s) takes string" % h))
-        if not path.isdir(self.rpath):
+        if not path.isdir(self.rpath):  # creating temporary directory
             makedirs(self.rpath, exist_ok=True)
         if (text, lang) not in self.flist.keys():
             s = gTTS(lang=lang, text=text)
-            while True:
+            while True:  # making sure audio file name is truely unique
                 fname = str(randint(1, 999999)) + '.mp3'
                 abp_fname = path.join(self.rpath, fname)
                 if not path.isfile(abp_fname):
@@ -63,8 +72,10 @@ class gtts(object):
             s.save(abp_fname)
         else:
             fname = path.basename(self.flist.get((text, lang)))
+        # returning ready to use url of the audio file
         return url_for('static', filename=path.join(self.rrpath, fname))
 
     def cleanup(self):
+        """ removing the temporary directory """
         if path.isdir(self.rpath):
             rmtree(self.rpath)
