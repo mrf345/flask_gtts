@@ -1,4 +1,4 @@
-from flask import current_app, Markup, url_for
+from flask import url_for
 from gtts import gTTS
 from os import path, makedirs
 from shutil import rmtree
