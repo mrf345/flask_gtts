@@ -49,8 +49,8 @@ gtts(app=app,
 > - sayit() options
 
 ```python
-    sayit(lang='en-us', # language to convert text to
-          text='say hi') # text to be converted`_<br />
+sayit(lang='en-us', # language to convert text to
+      text='say hi') # text to be converted`_<br />
 ```
 
 > _List of supported languages :_
