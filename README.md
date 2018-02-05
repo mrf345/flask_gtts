@@ -1,31 +1,32 @@
-# flask_gtts
-### A [Flask][1a19dccf] extension to add [gTTS][0de5906d] Google text to speech, into the template, it makes adding and configuring multiple text to speech audio files at a time much easier and less time consuming
+<h1 align='center'>flask_gtts</h1>
+<h3 align='center'>A Flask extension to add gTTS (Google text to speech), into the template, it makes adding and configuring multiple text to speech audio files at a time much easier and less time consuming.</h3>
 
-  [1a19dccf]: http://flask.pocoo.org/ "Flask website"
-  [0de5906d]: https://github.com/pndurette/gTTS "gTTS repo"
-
-## Install it :
+## Install:
 #### - With pip
-`pip install Flask-gTTS` <br />
-#### - or from github
-`git clone https://github.com/mrf345/flask_gtts.git`<br />
-`cd flask_gtts` <br />
-`python setup.py install`
-## Run it :
+> - `pip install Flask-gTTS` <br />
+
+#### - From the source:
+> - `git clone https://github.com/mrf345/flask_gtts.git`<br />
+> - `cd flask_gtts` <br />
+> - `python setup.py install`
+
+## Setup:
+#### - Inside the Flask app:
 ```python
 from flask import Flask, render_template
 from flask_gtts import gtts
 app = Flask(__name__)
 gtts(app)
 ```
-#### inside the template
+
+#### - Inside the jinja template:
 ```jinja
 {% block content %}
   <audio src="{{ sayit(text='Hello from Flask !')}}"></audio>
 {% endblock %}
 ```
+> - More complex example:
 
-#### More detailed example
 ```jinja
 {% block content %}
   <button type='button' onclick='document.getElementById("us").play();'>American</button>
@@ -36,23 +37,24 @@ gtts(app)
   <audio id='brit' src="{{ sayit(lang='en-uk', text='Hello from Flask !') }}"></audio>
 {% endblock %}
 ```
-#### _Result_
-![Datepicker](https://raw.githubusercontent.com/usb-resetter/usb-resetter.github.io/master/images/gtts.png)
-##### _Click any of them to hear the accent !_
 
 ## Settings:
-- gtts() options
+> - gtts() options
+
 ```python
 gtts(app=app,
     temporary=True, # to remove audio files on exit
     tempdir='tempfile') # relative path in-which audio files will be stored
 ```
-- sayit() options
+> - sayit() options
+
 ```python
     sayit(lang='en-us', # language to convert text to
           text='say hi') # text to be converted`_<br />
 ```
-##### _List of supported languages :_
+
+> _List of supported languages :_
+
 `
     'af' : 'Afrikaans'
     'sq' : 'Albanian'
@@ -108,3 +110,8 @@ gtts(app=app,
     'vi' : 'Vietnamese'
     'cy' : 'Welsh'
 `
+
+## Credit:
+> - [gTTS][2c6d97b1]: Python Google text-to-speech
+
+  [2c6d97b1]: https://github.com/pndurette/gTTS "gTTs repo"
