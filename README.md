@@ -44,7 +44,9 @@ gtts(app)
 ```python
 gtts(app=app,
     temporary=True, # to remove audio files on exit
-    tempdir='tempfile') # relative path in-which audio files will be stored
+    tempdir='tempfile', # relative path in-which audio files will be stored
+    route=False # opens route on /gtts that takes /language/text as args to return gtts mp3 link
+    ) 
 ```
 > - sayit() options
 
