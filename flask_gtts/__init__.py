@@ -2,7 +2,8 @@ from flask import url_for, redirect
 from gtts import gTTS
 from os import path, makedirs
 from shutil import rmtree
-from random import randint
+# from random import randint
+from datetime import datetime
 from atexit import register
 from sys import version_info
 
@@ -53,14 +54,20 @@ class gtts(object):
             if not isinstance(a, str):  # check if receiving a string
                 raise(TypeError("gtts.say(%s) takes string" % h))
         if not path.isdir(self.rpath):  # creating temporary directory
-            if version_info.major == 2:
+            if version_info.major == 2: # makedirs in py2 missing exist_ok
                 makedirs(self.rpath)
             else:
                 makedirs(self.rpath, exist_ok=True)
         if (text, lang) not in self.flist.keys():
             s = gTTS(lang=lang, text=text)
             while True:  # making sure audio file name is truly unique
-                fname = str(randint(1, 9999999)) + '.mp3'
+                # fname = str(randint(1, 9999999)) + '.mp3'
+                fname = str(
+                    datetime.utcnow()
+                    ).replace('.', ''
+                    ).replace('-', ''
+                    ).replace(' ', ''
+                    ).replace(':', '') + '.mp3'
                 abp_fname = path.join(self.rpath, fname)
                 if not path.isfile(abp_fname):
                     break
