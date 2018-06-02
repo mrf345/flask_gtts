@@ -2,7 +2,6 @@ from flask import url_for, redirect, jsonify
 from gtts import gTTS
 from os import path, makedirs
 from shutil import rmtree
-# from random import randint
 from datetime import datetime
 from atexit import register
 from sys import version_info
@@ -61,7 +60,6 @@ class gtts(object):
         if (text, lang) not in self.flist.keys():
             s = gTTS(lang=lang, text=text)
             while True:  # making sure audio file name is truly unique
-                # fname = str(randint(1, 9999999)) + '.mp3'
                 fname = str(
                     datetime.utcnow()
                     ).replace('.', ''
