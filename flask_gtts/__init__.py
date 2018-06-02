@@ -1,4 +1,4 @@
-from flask import url_for, redirect
+from flask import url_for, redirect, jsonify
 from gtts import gTTS
 from os import path, makedirs
 from shutil import rmtree
@@ -87,4 +87,4 @@ class gtts(object):
         """ to setup a route on /gtts/lang/text, that cache & returns mp3 file link """
         @self.app.route('/gtts/<language>/<text>')
         def gttsRoute(language, text):
-            return self.say(language.encode('utf8'), text.encode('utf8'))
+            return jsonify(mp3=self.say(language.encode('utf8'), text.encode('utf8')))
