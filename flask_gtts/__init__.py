@@ -85,4 +85,7 @@ class gtts(object):
         """ to setup a route on /gtts/lang/text, that cache & returns mp3 file link """
         @self.app.route('/gtts/<language>/<text>')
         def gttsRoute(language, text):
-            return jsonify(mp3=self.say(language.encode('utf8'), text.encode('utf8')))
+            return jsonify(mp3=self.say(
+                language.encode('utf8'),
+                text.encode('utf8')
+                ).replace('%5C', '/'))
