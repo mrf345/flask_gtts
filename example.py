@@ -17,7 +17,34 @@ register(cleanUp)
 @app.route('/')
 def root():
     with open('index.html', 'w+') as file:
-        file.write('<html><body><audio src="{{sayit("en-us","something to say")}}" controls></body></html>')
+        file.write('''
+            <html>
+            <body>
+                <h1 id="sayit" style="text-align: center;">
+                    Another thing to say whenever clicked !
+                </h1>
+                <audio src="{{sayit("en-us","something to say")}}" controls>
+                <script type='text/javascript'>
+                    document.getElementById('sayit')
+                    .addEventListener('click', (e) => {
+                        fetch(
+                            window.location.origin + 
+                            '/gtts/en-us/' + 
+                            String(document.getElementById('sayit').innerText)
+                        ).then(function (r) {
+                            return r.json()
+                        }).then(function (j) {
+                            let a = document.createElement('AUDIO')
+                            a.src = window.location.origin + j.mp3
+                            a.play()
+                        }).catch(function (e) {
+                            console.warn(e)
+                        })
+                    })
+                </script>
+            </body>
+            </html>
+        ''')
     return render_template('index.html')
 
 
