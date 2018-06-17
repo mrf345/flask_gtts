@@ -89,7 +89,6 @@ class gtts(object):
             '''
             <script>
             window.addEventListener('load', function () {
-                console.log('inside it !')
                 var Elements = "%s".startsWith('#'
                     ) ? [document.getElementById("%s".slice(1))
                     ] : [].slice.call(document.getElementsByClassName("%s".slice(1)))

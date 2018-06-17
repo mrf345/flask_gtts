@@ -1,0 +1,10 @@
+README.md
+setup.cfg
+setup.py
+Flask_gTTS.egg-info/PKG-INFO
+Flask_gTTS.egg-info/SOURCES.txt
+Flask_gTTS.egg-info/dependency_links.txt
+Flask_gTTS.egg-info/not-zip-safe
+Flask_gTTS.egg-info/requires.txt
+Flask_gTTS.egg-info/top_level.txt
+flask_gtts/__init__.py
