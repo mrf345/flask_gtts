@@ -19,29 +19,14 @@ def root():
     with open('index.html', 'w+') as file:
         file.write('''
             <html>
+            <head>
+            {{ read(id='.sayit') }}
+            </head>
             <body>
-                <h1 id="sayit" style="text-align: center;">
+                <h1 class="sayit" style="text-align: center;">
                     Another thing to say whenever clicked !
                 </h1>
                 <audio src="{{sayit("en-us","something to say")}}" controls>
-                <script type='text/javascript'>
-                    document.getElementById('sayit')
-                    .addEventListener('click', (e) => {
-                        fetch(
-                            window.location.origin + 
-                            '/gtts/en-us/' + 
-                            String(document.getElementById('sayit').innerText)
-                        ).then(function (r) {
-                            return r.json()
-                        }).then(function (j) {
-                            let a = document.createElement('AUDIO')
-                            a.src = window.location.origin + j.mp3
-                            a.play()
-                        }).catch(function (e) {
-                            console.warn(e)
-                        })
-                    })
-                </script>
             </body>
             </html>
         ''')

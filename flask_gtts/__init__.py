@@ -1,4 +1,4 @@
-from flask import url_for, redirect, jsonify
+from flask import url_for, redirect, jsonify, Markup
 from gtts import gTTS
 from os import path, makedirs
 from shutil import rmtree
@@ -23,6 +23,7 @@ class gtts(object):
         """
         self.app = app
         self.temporary = temporary
+        self.route = route
         self.rpath = path.join(self.app.static_folder, tempdir)
         self.rrpath = tempdir
         self.flist = {}
@@ -39,26 +40,26 @@ class gtts(object):
         self.injectem()  # injecting into the template
         if self.temporary:
             register(self.cleanup)  # register audio files removal before exit
-        if route:
+        if self.route:
             self.gTTsRoute()
 
     def injectem(self):
         """ to inject say function as sayit into the template """
         @self.app.context_processor
         def inject_vars():
-            return dict(sayit=self.say)
+            return dict(sayit=self.say, read=self.read)
 
     def say(self, lang='en-us', text='Flask says Hi!'):
         for h, a in {'lang': lang, 'text': text}.items():
             if not isinstance(a, str):  # check if receiving a string
                 raise(TypeError("gtts.say(%s) takes string" % h))
         if not path.isdir(self.rpath):  # creating temporary directory
-            if version_info.major == 2: # makedirs in py2 missing exist_ok
-                makedirs(self.rpath)
-            else:
-                makedirs(self.rpath, exist_ok=True)
+            makedirs(self.rpath) if version_info.major == 2 else makedirs(
+                # makedirs in py2 missing exist_ok
+                self.rpath, exist_ok=True
+            )
         if (text, lang) not in self.flist.keys():
-            s = gTTS(lang=lang, text=text)
+            s = gTTS(text=text) if lang == 'skip' else gTTS(lang=lang, text=text)
             while True:  # making sure audio file name is truly unique
                 fname = str(
                     datetime.utcnow()
@@ -75,6 +76,44 @@ class gtts(object):
             fname = path.basename(self.flist.get((text, lang)))
         # returning ready to use url of the audio file
         return url_for('static', filename=path.join(self.rrpath, fname))
+
+    def read(self, id='.toRead', mouseover=False):
+        if not isinstance(id, str):
+            raise(TypeError("gtts.say_if(id) takes string"))
+        if not isinstance(mouseover, bool):
+            raise(TypeError("gtts.say_if(hover) takes True or False"))
+        if not self.route:
+            # activate route if not already
+            self.gTTsRoute()
+        return Markup(
+            '''
+            <script>
+            window.addEventListener('load', function () {
+                console.log('inside it !')
+                var Elements = "%s".startsWith('#'
+                    ) ? [document.getElementById("%s".slice(1))
+                    ] : [].slice.call(document.getElementsByClassName("%s".slice(1)))
+                Elements.forEach(function (i) {
+                    i.addEventListener("%s", function () {
+                        fetch(
+                            window.location.origin + 
+                            '/gtts/skip/' + i.innerText
+                        ).then(function (r) { return r.json() })
+                        .then(function (j) {
+                            var toPlay = document.createElement('AUDIO')
+                            toPlay.src = j.mp3
+                            toPlay.play()
+                        }).catch(function (e) console.warn(
+                            'Flask-gTTS failed to fetch TTS from route'
+                        ))
+                    })
+                })
+            })
+            </script>
+            ''' % (id, id, id, 'mouseover' if mouseover else 'click')
+        )
+        
+        
 
     def cleanup(self):
         """ removing the temporary directory """

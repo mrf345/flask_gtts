@@ -38,6 +38,16 @@ gtts(app)
 {% endblock %}
 ```
 
+> - Dynamic TTS example:
+```jinja
+<head>
+  {% read(id='.readIt') %}
+</head>
+<body>
+  <h1 class='readIt'>Say something</h1>
+</body>
+```
+
 ## Settings:
 > - gtts() options
 
@@ -53,6 +63,14 @@ gtts(app=app,
 ```python
 sayit(lang='en-us', # language to convert text to
       text='say hi') # text to be converted`_<br />
+```
+
+> - read() options
+```python
+read(
+  id='.toRead', # text element id to read text from takes . or #
+  mouseover=False # if enabled event mouseover instead of click
+)
 ```
 
 > _List of supported languages :_
