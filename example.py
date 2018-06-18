@@ -23,10 +23,13 @@ def root():
             {{ read(id='.sayit') }}
             </head>
             <body>
-                <h1 class="sayit" style="text-align: center;">
+            <center>
+                <h1 class="sayit">
                     Another thing to say whenever clicked !
                 </h1>
-                <audio src="{{sayit("en-us","something to say")}}" controls>
+                <h1 class='sayit' language='it'>qualcosa da dire</h1>
+                <audio id='aud' src="{{sayit("en-us","something to say")}}" controls>
+            </center>
             </body>
             </html>
         ''')

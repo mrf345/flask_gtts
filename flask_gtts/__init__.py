@@ -95,8 +95,9 @@ class gtts(object):
                 Elements.forEach(function (i) {
                     i.addEventListener("%s", function () {
                         fetch(
-                            window.location.origin + 
-                            '/gtts/skip/' + i.innerText
+                            window.location.origin + '/gtts/' + 
+                            (i.getAttribute('language') ? i.getAttribute(
+                            'language') : 'skip') + '/' + i.innerText
                         ).then(function (r) { return r.json() })
                         .then(function (j) {
                             var toPlay = document.createElement('AUDIO')
