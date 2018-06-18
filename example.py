@@ -24,7 +24,7 @@ def root():
             </head>
             <body>
             <center>
-                <h1 class="sayit">
+                <h1 class="sayit" language='en-us'>
                     Another thing to say whenever clicked !
                 </h1>
                 <h1 class='sayit' language='it'>qualcosa da dire</h1>

@@ -88,24 +88,24 @@ class gtts(object):
         return Markup(
             '''
             <script>
-            window.addEventListener('load', function () {
-                var Elements = "%s".startsWith('#'
+            document.addEventListener('DOMContentLoaded', function () {
+                ("%s".startsWith('#'
                     ) ? [document.getElementById("%s".slice(1))
                     ] : [].slice.call(document.getElementsByClassName("%s".slice(1)))
-                Elements.forEach(function (i) {
+                ).forEach(function (i) {
                     i.addEventListener("%s", function () {
                         fetch(
                             window.location.origin + '/gtts/' + 
-                            (i.getAttribute('language') ? i.getAttribute(
-                            'language') : 'skip') + '/' + i.innerText
+                            (i.getAttribute('language') || 'skip') +
+                            '/' + i.innerText
                         ).then(function (r) { return r.json() })
                         .then(function (j) {
                             var toPlay = document.createElement('AUDIO')
                             toPlay.src = j.mp3
                             toPlay.play()
-                        }).catch(function (e) console.warn(
+                        }).catch(function (e) { console.warn(
                             'Flask-gTTS failed to fetch TTS from route'
-                        ))
+                        ) })
                     })
                 })
             })
