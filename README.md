@@ -41,7 +41,7 @@ gtts(app)
 > - Dynamic TTS example:
 ```jinja
 <head>
-  {% read(id='.readIt') %}
+  {{ read(id='.readIt') }}
 </head>
 <body>
   <h1 class='readIt'>Say something</h1>
