@@ -75,7 +75,8 @@ class gtts(object):
         else:
             fname = path.basename(self.flist.get((text, lang)))
         # returning ready to use url of the audio file
-        return url_for('static', filename=path.join(self.rrpath, fname))
+        with self.app.app_context():
+            return url_for('static', filename=path.join(self.rrpath, fname))
 
     def read(self, id='.toRead', mouseover=False):
         if not isinstance(id, str):
