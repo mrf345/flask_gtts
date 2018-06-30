@@ -126,6 +126,6 @@ class gtts(object):
         @self.app.route('/gtts/<language>/<text>')
         def gttsRoute(language, text):
             return jsonify(mp3=self.say(
-                language.encode('utf8'),
-                text.encode('utf8')
-                ).replace('%5C', '/'))
+                language.encode('utf8') if version_info.major == 2 else language,
+                text.encode('utf8') if version_info.major == 2 else text
+            ).replace('%5C', '/'))

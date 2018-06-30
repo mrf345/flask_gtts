@@ -7,6 +7,9 @@ from pytest import fixture
 from atexit import register
 from random import randint
 from tempfile import TemporaryFile
+from json import loads
+from sys import version_info as V
+from hashlib import md5
 
 text = 'something to say'
 language = 'en-uk'
@@ -62,38 +65,37 @@ def client():
 def test_false_app_gtts(client):
     """ test gtts false app input """
     try:
-        eng = gtts(app=None)
+        gtts(app=None)
     except Exception as e1:
         assert type(e1) == AttributeError
     try:
-        eng = gtts(app=app, temporary=200)
+        gtts(app=app, temporary=200)
     except Exception as e2:
         assert type(e2) == TypeError
     try:
-        eng = gtts(app=app, tempdir='/')
+        gtts(app=app, tempdir='/')
     except Exception as e4:
         assert type(e4) == TypeError
     try:
-        eng = gtts(app=app, tempdir=200)
+        gtts(app=app, tempdir=200)
     except Exception as e3:
         global eng
         eng = gtts(app=app, route=True)
-        assert type(e3) == AttributeError
+        assert type(e3) == AttributeError if V.major == 2 else TypeError
 
 def test_template_sayit_mp3(client):
     """ test sayit function in the template returns .mp3 """
     resp = client.get('/say').data
-    assert resp.endswith('.mp3')
+    assert resp.endswith(b'.mp3')
     ret = eng.say(language, text)
     assert ret.endswith('.mp3') 
 
 def test_template_sayit_valid(client):
     """ test validity of mp3 file from template sayit """
-    mp3 = TemporaryFile()
-    gTTS(text=text, lang=language).write_to_fp(mp3)
-    with open(client.get('/say').data[1:]) as resp:
-        with mp3 as default:
-            default.seek(0)
+    # mp3 = TemporaryFile()
+    gTTS(text=text, lang=language).save('static/testing.mp3')
+    with open(client.get('/say').data[1:], 'rb') as resp:
+        with open('static/testing.mp3', 'rb') as default:
             assert resp.read() == default.read()
 
 def test_dynamic_route_mp3(client):
@@ -106,7 +108,7 @@ def test_dynamic_route_mp3(client):
 def test_template_read_js(client):
     """ test if JS loaded in templated with read """
     resp = client.get('/read').data
-    assert 'Flask-gTTS failed to fetch TTS' in resp
+    assert b'Flask-gTTS failed to fetch TTS' in resp
 
 def test_read_false_input_after_right(client):
     """ test gtts.read with False route """
