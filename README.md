@@ -1,4 +1,8 @@
 <h1 align='center'>flask_gtts</h1>
+<p align='center'>
+<a href='https://travis-ci.com/mrf345/flask_gtts'><img src='https://travis-ci.com/mrf345/flask_gtts.svg?branch=master'/></a>
+<a href='https://coveralls.io/github/mrf345/flask_gtts?branch=master'><img src='https://coveralls.io/repos/github/mrf345/flask_gtts/badge.svg?branch=master' alt='Coverage Status' /></a>
+</p>
 <h3 align='center'>A Flask extension to add gTTS (Google text to speech), into the template, it makes adding and configuring multiple text to speech audio files at a time much easier and less time consuming.</h3>
 
 ## Install:
