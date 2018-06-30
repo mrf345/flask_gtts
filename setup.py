@@ -12,9 +12,9 @@ from setuptools import setup
 
 setup(
     name='Flask-gTTS',
-    version='0.9',
+    version='0.11',
     url='https://github.com/mrf345/flask_gtts/',
-    download_url='https://github.com/mrf345/flask_gtts/archive/0.9.tar.gz',
+    download_url='https://github.com/mrf345/flask_gtts/archive/0.11.tar.gz',
     license='MIT',
     author='Mohamed Feddad',
     author_email='mrf345@gmail.com',
@@ -39,5 +39,7 @@ setup(
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
-    ]
+    ],
+    setup_requires=['pytest-runner'],
+    test_requires=['pytest']
 )

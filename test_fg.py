@@ -9,7 +9,7 @@ from random import randint
 from tempfile import TemporaryFile
 from json import loads
 from sys import version_info as V
-from hashlib import md5
+
 
 text = 'something to say'
 language = 'en-uk'
