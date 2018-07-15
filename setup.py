@@ -27,7 +27,8 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
-        'gTTS'
+        'gTTS',
+        'static_parameters'
     ],
     keywords=['flask', 'extension', 'google', 'text', 'speech',
               'gTTS', 'TTS', 'text-to-speech'],

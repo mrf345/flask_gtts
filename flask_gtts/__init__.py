@@ -1,12 +1,13 @@
 from flask import url_for, redirect, jsonify, Markup
 from gtts import gTTS
+from static_parameters import function_parameters, class_parameters
 from os import path, makedirs
 from shutil import rmtree
 from datetime import datetime
 from atexit import register
 from sys import version_info
 
-
+@class_parameters(function_parameters)
 class gtts(object):
     def __init__(
         self, app=None, temporary=True,
@@ -20,6 +21,7 @@ class gtts(object):
         will be stored (Default: 'flask_gtts')
         @param: route to produce gtts file from route /gtts/language/text
         (Default: False)
+        ((tempdir:str)) ((temporary:bool))
         """
         self.app = app
         self.temporary = temporary
@@ -30,13 +32,9 @@ class gtts(object):
         self.routeFiles = {}
         if self.app is None:
             raise(AttributeError("must pass app to gtts(app=)"))
-        if not isinstance(tempdir, str):
-            raise(TypeError("gtts(tempdir=) takes a string for a static path"))
         elif tempdir.startswith('/'):
             raise(TypeError(
                 "gtts(tempdir=) requires relative path not abolute"))
-        if not isinstance(temporary, bool):
-            raise(TypeError("gtts(temporary=) takes True or False"))
         self.injectem()  # injecting into the template
         if self.temporary:
             register(self.cleanup)  # register audio files removal before exit
@@ -50,9 +48,7 @@ class gtts(object):
             return dict(sayit=self.say, read=self.read)
 
     def say(self, lang='en-us', text='Flask says Hi!'):
-        for h, a in {'lang': lang, 'text': text}.items():
-            if not isinstance(a, str):  # check if receiving a string
-                raise(TypeError("gtts.say(%s) takes string" % h))
+        """((lang:str)) ((text:str))"""
         if not path.isdir(self.rpath):  # creating temporary directory
             makedirs(self.rpath) if version_info.major == 2 else makedirs(
                 # makedirs in py2 missing exist_ok
@@ -79,10 +75,7 @@ class gtts(object):
             return url_for('static', filename=path.join(self.rrpath, fname))
 
     def read(self, id='.toRead', mouseover=False):
-        if not isinstance(id, str):
-            raise(TypeError("gtts.say_if(id) takes string"))
-        if not isinstance(mouseover, bool):
-            raise(TypeError("gtts.say_if(hover) takes True or False"))
+        """((id:str)) ((mouseover:bool))"""
         if not self.route:
             # activate route if not already
             self.gTTsRoute()
@@ -113,8 +106,7 @@ class gtts(object):
             </script>
             ''' % (id, id, id, 'mouseover' if mouseover else 'click')
         )
-        
-        
+    
 
     def cleanup(self):
         """ removing the temporary directory """
