@@ -81,7 +81,7 @@ def test_false_app_gtts(client):
     except Exception as e3:
         global eng
         eng = gtts(app=app, route=True)
-        assert type(e3) == AttributeError if V.major == 2 else TypeError
+        assert type(e3) == (AttributeError if V.major == 2 else TypeError)
 
 def test_template_sayit_mp3(client):
     """ test sayit function in the template returns .mp3 """
