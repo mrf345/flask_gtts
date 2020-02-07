@@ -12,9 +12,9 @@ from setuptools import setup
 
 setup(
     name='Flask-gTTS',
-    version='0.12',
+    version='0.13',
     url='https://github.com/mrf345/flask_gtts/',
-    download_url='https://github.com/mrf345/flask_gtts/archive/0.12.tar.gz',
+    download_url='https://github.com/mrf345/flask_gtts/archive/0.13.tar.gz',
     license='MIT',
     author='Mohamed Feddad',
     author_email='mrf345@gmail.com',
