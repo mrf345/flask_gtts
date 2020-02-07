@@ -7,11 +7,11 @@ from datetime import datetime
 from atexit import register
 from sys import version_info
 
+
 @class_parameters(function_parameters)
 class gtts(object):
-    def __init__(
-        self, app=None, temporary=True,
-        tempdir='flask_gtts', route=False):
+    def __init__(self, app=None, temporary=True,
+                 tempdir='flask_gtts', route=False):
         """
         initiating the extension with the Flask app instance
         @param: app Flask app instance (Default: None)
@@ -23,21 +23,29 @@ class gtts(object):
         (Default: False)
         ((tempdir:str)) ((temporary:bool))
         """
-        self.app = app
         self.temporary = temporary
         self.route = route
-        self.rpath = path.join(self.app.static_folder, tempdir)
         self.rrpath = tempdir
         self.flist = {}
         self.routeFiles = {}
-        if self.app is None:
-            raise(AttributeError("must pass app to gtts(app=)"))
-        elif tempdir.startswith('/'):
+        if tempdir.startswith('/'):
             raise(TypeError(
                 "gtts(tempdir=) requires relative path not abolute"))
-        self.injectem()  # injecting into the template
+
         if self.temporary:
             register(self.cleanup)  # register audio files removal before exit
+
+        if app:
+            self.app = app
+            self.rpath = path.join(self.app.static_folder, tempdir)
+            self.injectem()  # injecting into the template
+            if self.route:
+                self.gTTsRoute()
+
+    def init_app(self, app):
+        self.app = app
+        self.rpath = path.join(self.app.static_folder, self.rrpath)
+        self.injectem()  # injecting into the template
         if self.route:
             self.gTTsRoute()
 
@@ -106,11 +114,10 @@ class gtts(object):
             </script>
             ''' % (id, id, id, 'mouseover' if mouseover else 'click')
         )
-    
 
     def cleanup(self):
         """ removing the temporary directory """
-        if path.isdir(self.rpath):
+        if hasattr(self, 'rpath') and path.isdir(self.rpath):
             rmtree(self.rpath)
 
     def gTTsRoute(self):
