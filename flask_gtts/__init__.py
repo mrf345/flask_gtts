@@ -80,7 +80,10 @@ class gtts(object):
             fname = path.basename(self.flist.get((text, lang)))
         # returning ready to use url of the audio file
         with self.app.app_context():
-            return url_for('static', filename=path.join(self.rrpath, fname))
+            try:
+                return url_for('static', filename=path.join(self.rrpath, fname))
+            except Exception:
+                return ''
 
     def read(self, id='.toRead', mouseover=False):
         """((id:str)) ((mouseover:bool))"""
