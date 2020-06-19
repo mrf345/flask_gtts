@@ -1,0 +1,19 @@
+<script type='application/javascript'>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('{id}')
+        .forEach(function (i) {
+            i.addEventListener('{event}', function () {
+                fetch(
+                    window.location.origin + '{route}/' + 
+                    (i.getAttribute('language') || 'skip') +
+                    '/' + i.innerText
+                )
+                .then(function (r) { return r.json() })
+                .then(function (j) { new Audio(j.mp3).play() })
+                .catch(function (e) {
+                    console.warn('Flask-gTTS failed to fetch TTS from route')
+                })
+            })
+        })
+})
+</script>

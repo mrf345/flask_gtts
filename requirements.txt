@@ -1,7 +1,0 @@
-flask
-gTTs
-static_parameters
-pytest
-pytest-cov
-coverage
-python-coveralls
