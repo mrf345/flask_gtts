@@ -1,0 +1,5 @@
+__version__ = '0.14'
+__doc__ = 'A Flask extension to help in generating Google Text-To-Speech files.'
+__license__ = 'MIT'
+__author__ = 'Mohamed Feddad'
+__email__ = 'mrf345@gmail.com'

@@ -3,16 +3,16 @@
 <a href='https://travis-ci.com/mrf345/flask_gtts'><img src='https://travis-ci.com/mrf345/flask_gtts.svg?branch=master'/></a>
 <a href='https://coveralls.io/github/mrf345/flask_gtts?branch=master'><img src='https://coveralls.io/repos/github/mrf345/flask_gtts/badge.svg?branch=master' alt='Coverage Status' /></a>
 </p>
-<h3 align='center'>A Flask extension to add gTTS (Google text to speech), into the template, it makes adding and configuring multiple text to speech audio files at a time much easier and less time consuming.</h3>
+<h3 align='center'>A Flask extension to add support for Google Text-To-Speech (TTS).</h3>
 
 ## Install:
 #### - With pip
-> - `pip install Flask-gTTS` <br />
+- `pip install Flask-gTTS` <br />
 
 #### - From the source:
-> - `git clone https://github.com/mrf345/flask_gtts.git`<br />
-> - `cd flask_gtts` <br />
-> - `python setup.py install`
+- `git clone https://github.com/mrf345/flask_gtts.git`<br />
+- `cd flask_gtts` <br />
+- `python setup.py install`
 
 ## Setup:
 #### - Inside the Flask app:
@@ -29,20 +29,8 @@ gtts(app)
   <audio src="{{ sayit(text='Hello from Flask !')}}"></audio>
 {% endblock %}
 ```
-> - More complex example:
 
-```jinja
-{% block content %}
-  <button type='button' onclick='document.getElementById("us").play();'>American</button>
-  <button type='button' onclick='document.getElementById("ausi").play();'>Australian</button>
-  <button type='button' onclick='document.getElementById("brit").play();'>British</button>
-  <audio id='us' src="{{ sayit(lang='en-us', text='Hello from Flask !') }}"></audio>
-  <audio id='ausi' src="{{ sayit(lang='en-au', text='Hello from Flask !') }}"></audio>
-  <audio id='brit' src="{{ sayit(lang='en-uk', text='Hello from Flask !') }}"></audio>
-{% endblock %}
-```
-
-> - Dynamic TTS example:
+#### - Dynamic read TTS example:
 ```jinja
 <head>
   {{ read(id='.readIt') }}
@@ -54,31 +42,70 @@ gtts(app)
 ```
 
 ## Settings:
-> - gtts() options
+- **`gtts()`** options:
 
 ```python
-gtts(app=app,
-    temporary=True, # to remove audio files on exit
-    tempdir='tempfile', # relative path in-which audio files will be stored
-    route=False # opens route on /gtts that takes /language/text as args to return gtts mp3 link
-    ) 
+def __init__(self, app=None, temporary=True, tempdir='flask_gtts', route=False,
+                 route_path='/gtts', route_decorator=None):
+        '''Extension to help in generating Google Text-To-Speech files.
+
+        Parameters
+        ----------
+        app : Flask Application, optional
+            Flask application instance, by default None
+        temporary : bool, optional
+            Remove the audio files before existing, by default True
+        tempdir : str, optional
+            Name of the static directory to store audio files in, by default 'flask_gtts'
+        route : bool, optional
+            Enable endpoint to generate TTS file dynamically, by default False
+        route_path : str, optional
+            Endpoint route path, by default '/gtts'
+        route_decorator : callable, optional
+            Decorator to wrap route endpoint, by default None
+        '''
 ```
-> - sayit() options
+
+- **`sayit()`** options:
 
 ```python
-sayit(lang='en-us', # language to convert text to
-      text='say hi') # text to be converted`_<br />
+def say(self, lang='en-us', text='Flask says Hi!'):
+        '''Generate a TTS audio file.
+
+        Parameters
+        ----------
+        lang : str, optional
+            Language to produce the TTS in, by default 'en-us'
+        text : str, optional
+            Text to convert into audio, by default 'Flask says Hi!'
+
+        Returns
+        -------
+        str
+            Relative url of the generated TTS audio file.
+        '''
 ```
 
-> - read() options
+- **`read()`** options:
 ```python
-read(
-  id='.toRead', # text element id to read text from takes . or #
-  mouseover=False # if enabled event mouseover instead of click
-)
+def read(self, id='.toRead', mouseover=False):
+        '''Read an HTML element inner text.
+
+        Parameters
+        ----------
+        id : str, optional
+            HTML element css selector, by default '.toRead'
+        mouseover : bool, optional
+            Read text on `mouseover` event instead of `click`, by default False
+
+        Returns
+        -------
+        str
+            Safe JavaScript to read an HTML element content.
+        '''
 ```
 
-> _List of supported languages :_
+- **List of supported languages**:
 
 `
     'af' : 'Afrikaans'
@@ -137,6 +164,6 @@ read(
 `
 
 ## Credit:
-> - [gTTS][2c6d97b1]: Python Google text-to-speech
+- [gTTS][2c6d97b1]: Python Google text-to-speech
 
   [2c6d97b1]: https://github.com/pndurette/gTTS "gTTs repo"

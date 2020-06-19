@@ -1,0 +1,4 @@
+[flake8]
+exclude = .eggs,.venv,__pycache__,*.pyc
+max-complexity = 20
+max-line-length = 100
