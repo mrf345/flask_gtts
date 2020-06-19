@@ -1,7 +1,17 @@
-<h1 align='center'>flask_gtts</h1>
+<h1 align='center'>Flask-gTTS</h1>
 <p align='center'>
-<a href='https://travis-ci.com/mrf345/flask_gtts'><img src='https://travis-ci.com/mrf345/flask_gtts.svg?branch=master'/></a>
-<a href='https://coveralls.io/github/mrf345/flask_gtts?branch=master'><img src='https://coveralls.io/repos/github/mrf345/flask_gtts/badge.svg?branch=master' alt='Coverage Status' /></a>
+    <a href='https://travis-ci.com/mrf345/flask_gtts'>
+        <img src='https://travis-ci.com/mrf345/flask_gtts.svg?branch=master' alt='Build Status' />
+    </a>
+    <a href='https://github.com/mrf345/flask_gtts/releases'>
+        <img src='https://img.shields.io/github/v/tag/mrf345/flask_gtts' alt='Latest Release' />
+    </a>
+    <a href='https://coveralls.io/github/mrf345/flask_gtts?branch=master'>
+        <img src='https://coveralls.io/repos/github/mrf345/flask_gtts/badge.svg?branch=master' alt='Coverage Status' />
+    </a>
+    <a href='https://www.python.org/dev/peps/pep-0008/'>
+        <img src='https://img.shields.io/badge/code%20style-PEP8-orange.svg' alt='Code Style' />
+    </a>
 </p>
 <h3 align='center'>A Flask extension to add support for Google Text-To-Speech (TTS).</h3>
 
@@ -15,6 +25,7 @@
 - `python setup.py install`
 
 ## Setup:
+
 #### - Inside the Flask app:
 ```python
 from flask import Flask, render_template
@@ -39,6 +50,29 @@ gtts(app)
   <h1 class='readIt'>Say something</h1>
   <h1 class='readIT' language='it'>qualcosa da dire</h1>
 </body>
+```
+
+#### - Dynamic route example:
+```python
+from flask import Flask
+from flask_gtts import gtts
+
+# If we want to allow only logged in users for example.
+from flask_login import login_required
+
+app = Flask(__name__)
+gtts(app,
+     route=True,
+     route_decorator=login_required,
+     route_path='/gtts')
+```
+
+And now you can test the endpoint by accessing `http://localhost:5000/gtts/en-us/some text to test`. It will return `JSON` response:
+
+```json
+{
+    "mp3": "Generated audio file path."
+}
 ```
 
 ## Settings:
