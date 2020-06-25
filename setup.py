@@ -39,10 +39,10 @@ setup(
     long_description_content_type='text/markdown',
     packages=['flask_gtts'],
     zip_safe=False,
-    include_package_data=True,
     platforms='any',
     install_requires=requirements,
     setup_requires=test_requirements,
+    package_data={'flask_gtts': ['read.html']},
     keywords=['flask', 'extension', 'google', 'text', 'speech',
               'gTTS', 'TTS', 'text-to-speech'],
     classifiers=[
