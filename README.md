@@ -97,6 +97,8 @@ def __init__(self, app=None, temporary=True, tempdir='flask_gtts', route=False,
             Endpoint route path, by default '/gtts'
         route_decorator : callable, optional
             Decorator to wrap route endpoint, by default None
+        failsafe : bool, optional
+            Failsafe or throw exceptions, by default False
         '''
 ```
 

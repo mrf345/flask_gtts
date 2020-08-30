@@ -1,9 +1,15 @@
 import os
+from flask_gtts import main
 from gtts import gTTS
 from flask_gtts import gtts
 from pytest import fixture
+from importlib import import_module
 
 from .setup import app, language, text, eng, message
+
+# workaround for py2 vs py3 mock import
+unittest = import_module('unittest')
+mock = getattr(unittest, 'mock', None) or import_module('mock')
 
 
 @fixture
@@ -11,8 +17,26 @@ def client():
     app.config['TESTING'] = True
     app.config['STATIC_FOLDER'] = 'static'
     app.config['SERVER_NAME'] = 'localhost'
+    app.logger = mock.MagicMock()
     client = app.test_client()
     yield client
+
+
+def test_gtts_remote_error_handling(client, monkeypatch):
+    mock_gtts = mock.MagicMock()
+    exception = AttributeError('something went wrong')
+
+    def mock_save():
+        raise exception
+
+    mock_gtts().save = mock_save
+    monkeypatch.setattr(main, 'gTTS', mock_gtts)
+
+    resp = client.get('%s/%s/%s' % (eng.route_path, language, text))
+
+    assert resp.status_code == 500
+    assert resp.json.get('mp3') == ''
+    assert app.logger.exception.called_once_with(exception)
 
 
 def test_false_app_gtts(client):
