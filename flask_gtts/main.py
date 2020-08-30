@@ -11,7 +11,7 @@ from flask_gtts.constants import PY2
 
 class gtts(object):
     def __init__(self, app=None, temporary=True, tempdir='flask_gtts', route=False,
-                 route_path='/gtts', route_decorator=None):
+                 route_path='/gtts', route_decorator=None, failsafe=False):
         '''Extension to help in generating Google Text-To-Speech files.
 
         Parameters
@@ -28,12 +28,15 @@ class gtts(object):
             Endpoint route path, by default '/gtts'
         route_decorator : callable, optional
             Decorator to wrap route endpoint, by default None
+        failsafe : bool, optional
+            Failsafe or throw exceptions, by default False
         '''
         self.temporary = temporary
         self.tempdir = 'flask_gtts' if not tempdir or tempdir.startswith('/') else tempdir
         self.route = route
         self.route_path = route_path
         self.route_decorator = route_decorator
+        self.failsafe = failsafe
         self.files = {}
 
         app and self.init_app(app)
@@ -86,6 +89,13 @@ class gtts(object):
         str
             Relative url of the generated TTS audio file.
         '''
+        def _handle_exception(exception):
+            if not self.failsafe:
+                raise exception
+
+            self.app.logger.exception(exception)
+            return ''
+
         if (text, lang) not in self.files:
             generator = gTTS(text=text) if lang == 'skip' else gTTS(lang=lang, text=text)
             file_name = None
@@ -99,7 +109,11 @@ class gtts(object):
                     break
 
             self.files[(text, lang)] = file_path
-            generator.save(file_path)
+
+            try:
+                generator.save(file_path)
+            except Exception as e:
+                return _handle_exception(e)
 
         file_name = os.path.basename(self.files.get((text, lang)))
         relative_dir = os.path.basename(self.tempdir)
@@ -108,8 +122,8 @@ class gtts(object):
             try:
                 return url_for('static',
                                filename=os.path.join(relative_dir, file_name))
-            except Exception:
-                return ''
+            except Exception as e:
+                return _handle_exception(e)
 
     def read(self, id='.toRead', mouseover=False):
         '''Read an HTML element inner text.
@@ -157,5 +171,5 @@ class gtts(object):
                 language = language.encode('utf8')
                 text = text.encode('utf8')
 
-            return jsonify(mp3=self.say(language, text)
-                                   .replace('%5C', '/'))
+            mp3_link = self.say(language, text).replace('%5C', '/')
+            return jsonify(mp3=mp3_link), 200 if mp3_link else 500

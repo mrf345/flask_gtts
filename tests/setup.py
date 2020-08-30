@@ -20,7 +20,10 @@ def prevent_header(function):
     return wrapper
 
 
-eng = gtts(app, route=True, route_decorator=prevent_header)
+eng = gtts(app,
+           route=True,
+           route_decorator=prevent_header,
+           failsafe=True)
 text = 'something to say'
 language = 'en-uk'
 
