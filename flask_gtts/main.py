@@ -11,7 +11,7 @@ from flask_gtts.constants import PY2
 
 class gtts(object):
     def __init__(self, app=None, temporary=True, tempdir='flask_gtts', route=False,
-                 route_path='/gtts', route_decorator=None, failsafe=False):
+                 route_path='/gtts', route_decorator=None, failsafe=False, logging=True):
         '''Extension to help in generating Google Text-To-Speech files.
 
         Parameters
@@ -30,6 +30,8 @@ class gtts(object):
             Decorator to wrap route endpoint, by default None
         failsafe : bool, optional
             Failsafe or throw exceptions, by default False
+        logging : bool, optional
+            Enable or disable logging, by default True
         '''
         self.temporary = temporary
         self.tempdir = 'flask_gtts' if not tempdir or tempdir.startswith('/') else tempdir
@@ -38,6 +40,7 @@ class gtts(object):
         self.route_decorator = route_decorator
         self.failsafe = failsafe
         self.files = {}
+        self.logging = logging
 
         app and self.init_app(app)
 
@@ -62,11 +65,23 @@ class gtts(object):
         self.route and self.set_route()
         self.temporary and at_exit.register(self.teardown)
 
+    def _handle_exception(self, exception):
+        if not self.failsafe:
+            raise exception
+
+        if self.logging:
+            self.app.logger.exception(exception)
+
+        return ''
+
     def teardown(self):
         '''Remove the cache directory and its content.'''
         self.files = {}
 
-        os.path.isdir(self.tempdir) and rmtree(self.tempdir)
+        try:
+            os.path.isdir(self.tempdir) and rmtree(self.tempdir)
+        except Exception as e:
+            self._handle_exception(e)
 
     def inject(self):
         '''Inject say and read into templates.'''
@@ -89,13 +104,6 @@ class gtts(object):
         str
             Relative url of the generated TTS audio file.
         '''
-        def _handle_exception(exception):
-            if not self.failsafe:
-                raise exception
-
-            self.app.logger.exception(exception)
-            return ''
-
         if (text, lang) not in self.files:
             generator = gTTS(text=text) if lang == 'skip' else gTTS(lang=lang, text=text)
             file_name = None
@@ -113,7 +121,7 @@ class gtts(object):
             try:
                 generator.save(file_path)
             except Exception as e:
-                return _handle_exception(e)
+                return self._handle_exception(e)
 
         file_name = os.path.basename(self.files.get((text, lang)))
         relative_dir = os.path.basename(self.tempdir)
@@ -123,7 +131,7 @@ class gtts(object):
                 return url_for('static',
                                filename=os.path.join(relative_dir, file_name))
             except Exception as e:
-                return _handle_exception(e)
+                return self._handle_exception(e)
 
     def read(self, id='.toRead', mouseover=False):
         '''Read an HTML element inner text.
