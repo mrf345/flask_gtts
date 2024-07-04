@@ -1,18 +1,19 @@
 <h1 align='center'>Flask-gTTS</h1>
 <p align='center'>
-    <a href='https://travis-ci.com/mrf345/flask_gtts'>
-        <img src='https://travis-ci.com/mrf345/flask_gtts.svg?branch=master' alt='Build Status' />
-    </a>
-    <a href='https://github.com/mrf345/flask_gtts/releases'>
-        <img src='https://img.shields.io/github/v/tag/mrf345/flask_gtts' alt='Latest Release' />
-    </a>
-    <a href='https://coveralls.io/github/mrf345/flask_gtts?branch=master'>
-        <img src='https://coveralls.io/repos/github/mrf345/flask_gtts/badge.svg?branch=master' alt='Coverage Status' />
-    </a>
-    <a href='https://www.python.org/dev/peps/pep-0008/'>
-        <img src='https://img.shields.io/badge/code%20style-PEP8-orange.svg' alt='Code Style' />
-    </a>
+<a href='https://pypi.org/project/Flask-gTTS/'>
+    <img src='https://img.shields.io/github/v/tag/mrf345/flask_gtts' alt='Latest Release' />
+</a>
+<a href='https://github.com/mrf345/flask_gtts/actions/workflows/ci.yml'>
+  <img src='https://github.com/mrf345/flask_gtts/actions/workflows/ci.yml/badge.svg'>
+</a>
+<a href='https://github.com/mrf345/flask_gtts/actions/workflows/ci.yml'>
+  <img src='https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/mrf345/bc746d7bfe356b54fbb93b2ea5d0d2a4/raw/flask_gtts__heads_master.json' alt='Coverage Percentage' />
+</a>
+<br />
+<img src='https://img.shields.io/pypi/pyversions/flask_gtts' alt='Supported versions' />
+<br />
 </p>
+
 <h3 align='center'>A Flask extension to add support for Google Text-To-Speech (TTS).</h3>
 
 ## Install:
