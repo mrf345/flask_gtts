@@ -1,12 +1,12 @@
 import os
-from functools import wraps
 import atexit as at_exit
+from functools import wraps
 from shutil import rmtree
 from uuid import uuid4
-from flask import url_for, jsonify, Markup
-from gtts import gTTS
 
-from flask_gtts.constants import PY2
+from flask import url_for, jsonify
+from gtts import gTTS
+from markupsafe import Markup
 
 
 class gtts(object):
@@ -57,10 +57,7 @@ class gtts(object):
         self.inject()
 
         if not os.path.isdir(self.tempdir):
-            if PY2:
-                os.makedirs(self.tempdir)
-            else:
-                os.makedirs(self.tempdir, exist_ok=True)
+            os.makedirs(self.tempdir, exist_ok=True)
 
         self.route and self.set_route()
         self.temporary and at_exit.register(self.teardown)
@@ -163,7 +160,7 @@ class gtts(object):
                                    .replace('{event}', 'mouseover' if mouseover else 'click'))
 
     def set_route(self):
-        ''' Setup a route endpont on `self.route_path/<language>/<text>` '''
+        ''' Setup a route endpoint on `self.route_path/<language>/<text>` '''
         def empty_decorator(function):
             @wraps(function)
             def wrapper(*args, **kwargs):
@@ -175,9 +172,5 @@ class gtts(object):
         @self.app.route(self.route_path + '/<language>/<text>')
         @decorator
         def gtts_route(language, text):
-            if PY2:
-                language = language.encode('utf8')
-                text = text.encode('utf8')
-
             mp3_link = self.say(language, text).replace('%5C', '/')
             return jsonify(mp3=mp3_link), 200 if mp3_link else 500
