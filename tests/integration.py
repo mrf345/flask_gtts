@@ -55,7 +55,7 @@ def test_template_sayit_file_exists(client):
     ''' test validity of mp3 file from template sayit '''
     extension.files = {}
     resp = client.get('/say')
-    static_file_relative = resp.data[1:].decode('utf-8')
+    static_file_relative = resp.data[1:].decode('utf-8').split('%5C')[-1]
     static_file_path = os.path.join(extension.tempdir,
                                     os.path.basename(static_file_relative))
 

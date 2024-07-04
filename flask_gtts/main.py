@@ -86,13 +86,13 @@ class gtts(object):
         def inject_vars():
             return dict(sayit=self.say, read=self.read)
 
-    def say(self, lang='en-us', text='Flask says Hi!'):
+    def say(self, lang='en', text='Flask says Hi!'):
         '''Generate a TTS audio file.
 
         Parameters
         ----------
         lang : str, optional
-            Language to produce the TTS in, by default 'en-us'
+            Language to produce the TTS in, by default 'en'
         text : str, optional
             Text to convert into audio, by default 'Flask says Hi!'
 

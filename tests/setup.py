@@ -25,7 +25,7 @@ extension = gtts(app,
                  route_decorator=prevent_header,
                  failsafe=True)
 text = 'something to say'
-language = 'en-uk'
+language = 'en'
 
 
 @app.route('/say')
