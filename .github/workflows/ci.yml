@@ -1,34 +1,25 @@
-name: Build
+name: CI
+
 on:
   push:
-  schedule:
-    # runs a new build everyday
-    - cron: 0 0 * * *
+  pull_request:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-latest]
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
-
+        python-version:
+          - "2.7.18"
+          - "3.5.9"
+          - "3.6.10"
+          - "3.7.7"
+          - "3.8.3"
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '>=1.18.1'
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          cache-dependency-path: '**/requirements/test.txt'
-      - name: Install dependencies
-        run: pip install -r requirements/test.txt
-      - name: Style check
-        run: |
-          python -m flake8
-      - name: Tests
-        run: |
-          python -m pytest
+      - run: pip install -r requirements/test.txt
+      - run: flake8 && pytest
+      - run: coveralls
